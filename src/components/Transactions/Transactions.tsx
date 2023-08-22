@@ -17,16 +17,18 @@ export default function Transations({ companyId }: { companyId: Number }) {
       <div className="card bg-neutral text-neutral-content">
         <div className="card-body">
           <h2 className="card-title">Latest transactions</h2>
-          <div className="grid grid-cols-3 items-center text-center gap-2">
+          <div className="grid grid-cols-4 items-center text-center gap-2">
             <h2 className="bg-slate-700 text-gray-100">Amount</h2>
             <h2 className="bg-slate-700 text-gray-100">Account id</h2>
             <h2 className="bg-slate-700 text-gray-100">Vendor</h2>
+            <h2 className="bg-slate-700 text-gray-100">Created At</h2>
             {latestTransation &&
               latestTransation.map((transation: Transaction, index: number) => (
                 <>
                   <h2 className="bg-slate-500 text-gray-100">{transation.amount}</h2>
                   <h2 className="bg-slate-500 text-gray-100">{transation.accountId}</h2>
                   <h2 className="bg-slate-500 text-gray-100">{transation.vendorName}</h2>
+                  <h2 className="bg-slate-500 text-gray-100">{new Date(transation.createdAt).toDateString()}</h2>
                 </>
               ))}
           </div>

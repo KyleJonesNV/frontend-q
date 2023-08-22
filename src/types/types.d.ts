@@ -36,9 +36,10 @@ type Transaction = {
   invoiceId: number
   amount: number
   vendorName: string
+  createdAt: Date
 }
 
-type NewTransation = {
+type NewTransaction = {
   accountId: number
   vendorId: number
   invoiceId: number
