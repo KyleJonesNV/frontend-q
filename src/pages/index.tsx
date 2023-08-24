@@ -4,7 +4,7 @@ import Company from '@/components/Company/Company'
 import Contact from '@/components/Contact/Contact'
 import Invoices from '@/components/Invoices/Invoices'
 import Navbar from '@/components/Navbar/Navbar'
-import Transations from '@/components/Transactions/Transactions'
+import Transactions from '@/components/Transactions/Transactions'
 import { useCallback } from 'react'
 import useSWR from 'swr'
 
@@ -13,7 +13,7 @@ const companyId = 4
 export const companyUrl = `/api/company`
 const accountsUrl = `/api/account/company/${companyId}`
 const transactionsUrl = `/api/transaction/company/${companyId}`
-
+export const cardsUrl = `/api/card/company/${companyId}`
 
 export default function Home() {
   const { data: accountsData, error: accountsError, isLoading: accountsIsLoading, mutate: mutateAccount } = useSWR(accountsUrl, fetcher)
@@ -41,7 +41,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-4">
             <AccountDetails accounts={accounts} />
-            <Transations companyId={companyId}/>
+            <Transactions companyId={companyId}/>
             <ActivateCard companyId={companyId}/>
             <Contact />
           </div>

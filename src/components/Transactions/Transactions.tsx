@@ -3,14 +3,14 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json())
 const url = '/api/transaction/company/'
 const latestLimit = 3
 
-export default function Transations({ companyId }: { companyId: Number }) {
+export default function Transactions({ companyId }: { companyId: Number }) {
   const { data, error, isLoading } = useSWR(url + companyId, fetcher)
 
   if (error) return <div>{`Failed to load :${error}`}</div>
   if (isLoading) return <div>Loading...</div>
 
-  const transations = data.transations as Transaction[]
-  const latestTransation = transations.slice(0, latestLimit)
+  const transactions = data.transactions as Transaction[]
+  const latestTransation = transactions.slice(0, latestLimit)
 
   return (
     <>
@@ -32,9 +32,9 @@ export default function Transations({ companyId }: { companyId: Number }) {
                 </>
               ))}
           </div>
-          {transations.length > latestLimit && (
+          {transactions.length > latestLimit && (
             <>
-              <button className="btn">{`${transations.length - latestLimit} more items in transations view`}</button>
+              <button className="btn">{`${transactions.length - latestLimit} more items in transations view`}</button>
             </>
           )}
         </div>

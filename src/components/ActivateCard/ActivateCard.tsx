@@ -1,25 +1,44 @@
+import { cardsUrl, fetcher } from '@/pages'
 import useSWR from 'swr'
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-const url = '/api/account/company/'
+import useSWRMutation from 'swr/mutation'
 
-export default function ActivateCard({companyId}: {companyId: Number}) {
-  const { data, error, isLoading } = useSWR(url + companyId, fetcher)
+async function activateCardFetcher(url: string, { arg }: { arg: { cardId: number } }) {
+  return fetch(url + '/' + arg.cardId, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  }).then((res) => res.json())
+}
 
-  if (error) return <div>{`Failed to load :${error}`}</div>
-  if (isLoading) return <div>Loading...</div>
+const activateCardUrl = '/api/card/activate/'
 
-  const { accounts } = data ?? {}
+
+export default function ActivateCard({ companyId }: { companyId: number }) {
+  const { data: cardsResponse, error, isLoading, mutate: mutateCard } = useSWR(cardsUrl, fetcher)
+  const { data, trigger: activateCard } = useSWRMutation(activateCardUrl, activateCardFetcher)
+  const card = cardsResponse && cardsResponse.cards.length > 0 ? cardsResponse.cards[0] as Card : undefined
+  const onClickActivate = async () => {
+    if (!card) return
+    await activateCard({cardId: card.id})
+    await mutateCard()
+  }  
 
   return (
     <>
+    {card && (
       <div className="card bg-neutral text-neutral-content">
         <div className="card-body items-center text-center">
-          <h2 className="card-title">Activate Card</h2>
           <p>Card Status</p>
-          <p>Inavtive</p>
-          <button className="btn btn-primary">Activate</button>
+          <p>{card.status}</p>
+          {!(card.status === 'active') && 
+            <>
+              <h2 className="card-title">Activate card</h2>
+              <button onClick={onClickActivate} className="btn btn-primary">Activate</button>
+            </>
+          }
+          {data && (<><div>{data.result}</div></>)}
         </div>
       </div>
+        )}
     </>
   )
 }
